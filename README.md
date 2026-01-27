@@ -9,50 +9,47 @@
 
 ## 📰 Dernière Veille
 
-# 🔍 Veille Tech - 27/01/2026 10:35
+# 🔍 Veille Tech - 27/01/2026 09:52
 
-**Requête:** Quoi de neuf en tech ?
+**Requête:** Veille tech quotidienne
 **Focus:** general
 
 ---
 
 ## 🎯 Vue d'ensemble
-- Apple lance une nouvelle version d'AirTag avec une portée étendue et une meilleure détection [🔗](https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/)
-- Windows 11 rencontre des problèmes persistants avec ses mises à jour Patch Tuesday [🔗](https://www.windowscentral.com/microsoft/windows-11/windows-11s-botched-patch-tuesday-update-nightmare-continues-as-microsoft-confirms-some-pcs-might-fail-to-boot)
-- Une étude révèle que les développeurs ressentent une pression éthique pour livrer des produits potentiellement en conflit avec les valeurs démocratiques [🔗](https://www.tandfonline.com/doi/full/10.1080/1369118X.2025.2566814)
-- Le mouvement "vibecoding" est critiqué par un développeur qui revient à la programmation manuelle [🔗](https://atmoio.substack.com/p/after-two-years-of-vibecoding-im)
-- Les conteneurs ChatGPT peuvent désormais exécuter des commandes bash et installer des packages [🔗](https://simonwillison.net/2026/Jan/26/chatgpt-containers/)
+- Apple lance une nouvelle version d'AirTag avec une portée étendue et une meilleure détection (https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/)
+- ChatGPT Containers gagne des fonctionnalités avancées comme l'exécution de bash et l'installation de packages (https://simonwillison.net/2026/Jan/26/chatgpt-containers/)
+- Heathrow supprime la limite de taille des contenants de liquide en cabine (https://www.bbc.com/news/articles/c1evvx89559o)
+- Windows 11 rencontre des problèmes majeurs avec sa mise à jour Patch Tuesday (https://www.windowscentral.com/microsoft/windows-11/windows-11s-botched-patch-tuesday-update-nightmare-continues-as-microsoft-confirms-some-pcs-might-fail-to-boot)
+- Discussion sur la bulle des outils d'AI code review (https://www.greptile.com/blog/ai-code-review-bubble)
 
 ## 🛠️ Outils & Projets Dev
-- **[Remotion]** (TypeScript) - Créer des vidéos de manière programmatique avec React → Idéal pour les développeurs qui veulent automatiser la production vidéo.
-  🔗 [https://github.com/remotion-dev/remotion](https://github.com/remotion-dev/remotion)
+- **[Remotion]** (TypeScript) - Création de vidéos programmatiques avec React → Idéal pour les développeurs voulant automatiser la production vidéo
+  🔗 https://github.com/remotion-dev/remotion
+- **[zerobrew]** (Rust) - Alternative à Homebrew 5-20x plus rapide → Solution intéressante pour les utilisateurs macOS cherchant des performances
+  🔗 https://github.com/lucasgelfond/zerobrew
 
 ## 📰 Articles & Discussions
-- **[Meta] Mods, when will you get on top of the constant AI slop posts?** ([Reddit Programming](http://reddit.com/r/programming)) - Critique de la qualité des posts sur l'IA dans les communautés de développeurs.
-- **Apple introduces new AirTag with longer range and improved findability** ([Hacker News](https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/)) - Annonce des nouvelles fonctionnalités de l'AirTag.
-- **After two years of vibecoding, I'm back to writing by hand** ([Reddit Programming](https://atmoio.substack.com/p/after-two-years-of-vibecoding-im)) - Un développeur partage son expérience avec le "vibecoding" et revient à la programmation manuelle.
-- **ChatGPT Containers can now run bash, pip/npm install packages and download files** ([Hacker News](https://simonwillison.net/2026/Jan/26/chatgpt-containers/)) - Nouvelles fonctionnalités des conteneurs ChatGPT.
-- **Heathrow scraps liquid container limit** ([Hacker News](https://www.bbc.com/news/articles/c1evvx89559o)) - Heathrow supprime la limite de taille des contenants de liquide.
-- **Windows 11's Patch Tuesday nightmare gets worse** ([Hacker News](https://www.windowscentral.com/microsoft/windows-11/windows-11s-botched-patch-tuesday-update-nightmare-continues-as-microsoft-confirms-some-pcs-might-fail-to-boot)) - Problèmes persistants avec les mises à jour de Windows 11.
-- **There is an AI code review bubble** ([Hacker News](https://www.greptile.com/blog/ai-code-review-bubble)) - Analyse de la bulle des revues de code par l'IA.
-- **People who know the formula for WD-40** ([Hacker News](https://www.wsj.com/business/the-secret-society-of-people-who-know-the-formula-for-wd-40-e9c0ff54)) - Article sur le secret de la formule du WD-40.
-- **JuiceSSH – Give me my pro features back** ([Hacker News](https://nproject.io/blog/juicessh-give-me-back-my-pro-features/)) - Demande de restauration des fonctionnalités pro de JuiceSSH.
-- **Study finds many software developers feel ethical pressure to ship products that may conflict with democratic values** ([Hacker News](https://www.tandfonline.com/doi/full/10.1080/1369118X.2025.2566814)) - Étude sur la pression éthique ressentie par les développeurs.
-- **The hidden engineering of runways** ([Hacker News](https://practical.engineering/blog/2026/1/20/the-hidden-engineering-of-runways)) - Article sur l'ingénierie des pistes d'atterrissage.
-- **RIP Low-Code 2014-2025** ([Hacker News](https://www.zackliscio.com/posts/rip-low-code-2014-2025/)) - Article sur la fin du mouvement low-code.
-- **AI code and software craft** ([Hacker News](https://alexwennerberg.com/blog/2026-01-25-slop.html)) - Réflexion sur l'impact de l'IA sur la qualité du code.
-- **Why there’s no European Google?** ([Lobsters](https://ploum.net/2026-01-22-why-no-european-google.html)) - Analyse des raisons de l'absence d'un équivalent européen à Google.
-- **Dithering – Part 2: The Ordered Dithering** ([Hacker News](https://visualrambling.space/dithering-part-2/)) - Deuxième partie sur le dithering.
+- **[Apple introduces new AirTag with longer range and improved findability]** (HackerNews) - Nouvelle version avec meilleure portée et détection
+  🔗 https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/
+- **[ChatGPT Containers can now run bash, pip/npm install packages and download files]** (HackerNews) - Fonctionnalités avancées ajoutées aux containers ChatGPT
+  🔗 https://simonwillison.net/2026/Jan/26/chatgpt-containers/
+- **[Heathrow scraps liquid container limit]** (HackerNews) - Suppression de la limite de taille des contenants de liquide en cabine
+  🔗 https://www.bbc.com/news/articles/c1evvx89559o
+- **[Windows 11's Patch Tuesday nightmare gets worse]** (HackerNews) - Problèmes majeurs avec la mise à jour Patch Tuesday de Windows 11
+  🔗 https://www.windowscentral.com/microsoft/windows-11/windows-11s-botched-patch-tuesday-update-nightmare-continues-as-microsoft-confirms-some-pcs-might-fail-to-boot
+- **[There is an AI code review bubble]** (HackerNews) - Discussion sur la surévaluation des outils d'AI code review
+  🔗 https://www.greptile.com/blog/ai-code-review-bubble
 
 ## 🤖 IA / Data / Infra
-- Aucune mise à jour notable.
+[Aucune donnée]
 
 ## 📚 À creuser
-- **Remotion** → [https://github.com/remotion-dev/remotion](https://github.com/remotion-dev/remotion)
-- **Apple's new AirTag** → [https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/](https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/)
-- **ChatGPT Containers** → [https://simonwillison.net/2026/Jan/26/chatgpt-containers/](https://simonwillison.net/2026/Jan/26/chatgpt-containers/)
+- [The hidden engineering of runways] → https://practical.engineering/blog/2026/1/20/the-hidden-engineering-of-runways
+- [The state of Linux music players in 2026] → https://crescentro.se/posts/linux-music-players-2026/
+- [The Enclosure feedback loop, or how LLMs sabotage existing programming practices by privatizing a public good] → https://michiel.buddingh.eu/enclosure-feedback-loop
 
-*Sources: [github_trending](https://github.com/remotion-dev/remotion), [reddit_programming](http://reddit.com/r/programming), [hackernews](https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/), [lobsters](https://ploum.net/2026-01-22-why-no-european-google.html)*
+*Sources: [https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/, https://simonwillison.net/2026/Jan/26/chatgpt-containers/, https://www.bbc.com/news/articles/c1evvx89559o, https://www.windowscentral.com/microsoft/windows-11/windows-11s-botched-patch-tuesday-update-nightmare-continues-as-microsoft-confirms-some-pcs-might-fail-to-boot, https://www.greptile.com/blog/ai-code-review-bubble, https://github.com/remotion-dev/remotion, https://github.com/lucasgelfond/zerobrew, https://practical.engineering/blog/2026/1/20/the-hidden-engineering-of-runways, https://crescentro.se/posts/linux-music-players-2026/, https://michiel.buddingh.eu/enclosure-feedback-loop]*
 
 ---
 📊 **Stats**: 1 outils | 15 articles | 0 IA/data | 0 vidéos
@@ -130,4 +127,4 @@ MIT
 
 ---
 
-*Dernière mise à jour: 27/01/2026 10:39 UTC*
+*Dernière mise à jour: 27/01/2026 09:52 UTC*
