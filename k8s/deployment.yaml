@@ -1,0 +1,120 @@
+# =============================================================================
+# Kubernetes Deployment - Tech Watch Agent
+# Optimisé pour k3s sur VPS modeste (Oracle Cloud Free Tier)
+# =============================================================================
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tech-watch-agent
+  labels:
+    app: tech-watch-agent
+    version: v1
+spec:
+  replicas: 1 # Une seule instance pour économiser les ressources
+  selector:
+    matchLabels:
+      app: tech-watch-agent
+  template:
+    metadata:
+      labels:
+        app: tech-watch-agent
+        version: v1
+    spec:
+      containers:
+        - name: tech-watch-agent
+          image: tech-watch-agent:latest
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+
+          # Variables d'environnement depuis Secret
+          envFrom:
+            - secretRef:
+                name: tech-watch-secrets
+
+          # Variables d'environnement additionnelles
+          env:
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: HTTP_PORT
+              value: "8080"
+
+          # Ressources limitées (VPS modeste)
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+
+          # Probes de santé
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          # Sécurité
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+
+          # Volume pour les fichiers temporaires
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+
+      # Affinité et tolérations pour k3s
+      tolerations:
+        - key: "node.kubernetes.io/disk-pressure"
+          operator: "Exists"
+          effect: "NoSchedule"
+
+      # Restart policy
+      restartPolicy: Always
+
+      # Termination
+      terminationGracePeriodSeconds: 30
+
+---
+# =============================================================================
+# Secret template (à créer manuellement avec vos clés)
+# kubectl create secret generic tech-watch-secrets \
+#   --from-literal=GOOGLE_API_KEY=your-key \
+#   --from-literal=MISTRAL_API_KEY=your-key
+# =============================================================================
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tech-watch-secrets
+type: Opaque
+stringData:
+  # Remplacer par vos vraies clés (ou créer le secret via kubectl)
+  GOOGLE_API_KEY: "your-google-api-key-here"
+  # MISTRAL_API_KEY: "your-mistral-api-key-here"
+  # YOUTUBE_API_KEY: "your-youtube-api-key-here"
+  # SERPAPI_KEY: "your-serpapi-key-here"

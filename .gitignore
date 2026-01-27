@@ -1,0 +1,61 @@
+# =============================================================================
+# .gitignore - Tech Watch Agent
+# =============================================================================
+
+# Environnement Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Fichiers de configuration locaux
+.env
+*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+*.cache
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Build
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Docker
+.docker/
+
+# Kubernetes secrets (ne jamais commiter!)
+k8s/*-secrets.yaml
+k8s/secrets/
+
+# Fichiers temporaires
+tmp/
+temp/
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db

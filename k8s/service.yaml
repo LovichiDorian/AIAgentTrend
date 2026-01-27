@@ -1,0 +1,87 @@
+# =============================================================================
+# Kubernetes Service - Tech Watch Agent
+# =============================================================================
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tech-watch-agent
+  labels:
+    app: tech-watch-agent
+spec:
+  type: ClusterIP # Utiliser NodePort ou LoadBalancer si accès externe direct
+  selector:
+    app: tech-watch-agent
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+
+---
+# =============================================================================
+# Ingress (optionnel - pour exposition externe via Traefik k3s)
+# =============================================================================
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tech-watch-agent-ingress
+  annotations:
+    # Traefik (par défaut sur k3s)
+    kubernetes.io/ingress.class: traefik
+    # Rate limiting basique
+    traefik.ingress.kubernetes.io/rate-limit: "average=10,burst=20"
+spec:
+  rules:
+    - host: tech-watch.your-domain.com # Remplacer par votre domaine
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tech-watch-agent
+                port:
+                  number: 80
+
+---
+# =============================================================================
+# CronJob (optionnel - pour veille automatique périodique)
+# =============================================================================
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: tech-watch-scheduled
+spec:
+  # Exécution tous les jours à 8h UTC
+  schedule: "0 8 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: tech-watch-cron
+              image: tech-watch-agent:latest
+              imagePullPolicy: IfNotPresent
+              command:
+                - python
+                - main.py
+                - "--focus"
+                - "all"
+                - "Veille quotidienne tech"
+              envFrom:
+                - secretRef:
+                    name: tech-watch-secrets
+              resources:
+                requests:
+                  memory: "128Mi"
+                  cpu: "100m"
+                limits:
+                  memory: "512Mi"
+                  cpu: "500m"
+          restartPolicy: OnFailure
