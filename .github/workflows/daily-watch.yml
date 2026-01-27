@@ -1,0 +1,73 @@
+name: 🔍 Daily Tech Watch
+
+on:
+  # Exécution automatique chaque jour à 8h UTC (9h Paris hiver, 10h été)
+  schedule:
+    - cron: "0 8 * * *"
+
+  # Permet aussi le déclenchement manuel
+  workflow_dispatch:
+    inputs:
+      focus:
+        description: "Focus thématique"
+        required: false
+        default: "general"
+        type: choice
+        options:
+          - general
+          - ai
+          - devops
+          - web
+          - security
+          - all
+
+jobs:
+  tech-watch:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # Pour pouvoir commit le README
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: 📦 Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: 🔍 Run Tech Watch Agent
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+        run: |
+          cd src
+          python main.py "Veille tech quotidienne" \
+            --focus ${{ github.event.inputs.focus || 'general' }} \
+            --output auto \
+            --output-dir ../output
+
+          # Générer aussi le README
+          python generate_readme.py
+
+      - name: 📝 Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          # Ajouter les fichiers générés
+          git add README.md output/
+
+          # Commit seulement s'il y a des changements
+          git diff --staged --quiet || git commit -m "🔍 Veille tech du $(date +'%Y-%m-%d')"
+
+          # Push
+          git push

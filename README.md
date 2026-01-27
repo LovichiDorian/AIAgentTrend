@@ -1,236 +1,133 @@
 # 🔍 Tech Watch Agent
 
-Agent de veille technologique automatisé basé sur **LangGraph** + **LangChain**, conçu pour tourner sur un VPS modeste (k3s, Oracle Cloud Free Tier).
+[![Daily Tech Watch](https://github.com/LovichiDorian/AIAgentTrend/actions/workflows/daily-watch.yml/badge.svg)](https://github.com/LovichiDorian/AIAgentTrend/actions/workflows/daily-watch.yml)
 
-## 🎯 Objectif
+> Agent de veille technologique automatisé basé sur **LangGraph** + **LangChain**.  
+> Mis à jour automatiquement chaque jour à 8h UTC.
 
-L'agent collecte, filtre et synthétise les actualités tech de multiples sources pour un développeur/ingénieur full-stack, DevOps ou IA.
+---
 
-**Caractéristiques clés:**
+## 📰 Dernière Veille
 
-- 📡 Multi-sources: GitHub Trending, Hacker News, Reddit, Lobste.rs, Tech News RSS, YouTube, Product Hunt...
-- 🤖 Synthèse LLM: Gemini ou Mistral (free tier)
-- ⚡ Sobre en ressources: Optimisé pour VPS modeste
-- 🐳 Containerisé: Docker + manifests Kubernetes (k3s)
+# 🔍 Veille Tech - 27/01/2026 10:35
 
-## 📁 Structure du projet
+**Requête:** Quoi de neuf en tech ?
+**Focus:** general
 
-```
-AIAGENTTREND/
-├── src/
-│   ├── agent/
-│   │   ├── __init__.py
-│   │   ├── state.py      # State LangGraph
-│   │   ├── tools.py      # Tools LangChain (sources)
-│   │   ├── nodes.py      # Nœuds du graph
-│   │   └── graph.py      # Construction StateGraph
-│   ├── config.py         # Configuration centralisée
-│   └── main.py           # Point d'entrée CLI/HTTP
-├── k8s/
-│   ├── deployment.yaml   # Deployment Kubernetes
-│   └── service.yaml      # Service + Ingress + CronJob
-├── Dockerfile
-├── requirements.txt
-├── .env.example
-└── README.md
-```
+---
 
-## 🚀 Démarrage rapide
+## 🎯 Vue d'ensemble
+- Apple lance une nouvelle version d'AirTag avec une portée étendue et une meilleure détection [🔗](https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/)
+- Windows 11 rencontre des problèmes persistants avec ses mises à jour Patch Tuesday [🔗](https://www.windowscentral.com/microsoft/windows-11/windows-11s-botched-patch-tuesday-update-nightmare-continues-as-microsoft-confirms-some-pcs-might-fail-to-boot)
+- Une étude révèle que les développeurs ressentent une pression éthique pour livrer des produits potentiellement en conflit avec les valeurs démocratiques [🔗](https://www.tandfonline.com/doi/full/10.1080/1369118X.2025.2566814)
+- Le mouvement "vibecoding" est critiqué par un développeur qui revient à la programmation manuelle [🔗](https://atmoio.substack.com/p/after-two-years-of-vibecoding-im)
+- Les conteneurs ChatGPT peuvent désormais exécuter des commandes bash et installer des packages [🔗](https://simonwillison.net/2026/Jan/26/chatgpt-containers/)
 
-### 1. Configuration
+## 🛠️ Outils & Projets Dev
+- **[Remotion]** (TypeScript) - Créer des vidéos de manière programmatique avec React → Idéal pour les développeurs qui veulent automatiser la production vidéo.
+  🔗 [https://github.com/remotion-dev/remotion](https://github.com/remotion-dev/remotion)
+
+## 📰 Articles & Discussions
+- **[Meta] Mods, when will you get on top of the constant AI slop posts?** ([Reddit Programming](http://reddit.com/r/programming)) - Critique de la qualité des posts sur l'IA dans les communautés de développeurs.
+- **Apple introduces new AirTag with longer range and improved findability** ([Hacker News](https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/)) - Annonce des nouvelles fonctionnalités de l'AirTag.
+- **After two years of vibecoding, I'm back to writing by hand** ([Reddit Programming](https://atmoio.substack.com/p/after-two-years-of-vibecoding-im)) - Un développeur partage son expérience avec le "vibecoding" et revient à la programmation manuelle.
+- **ChatGPT Containers can now run bash, pip/npm install packages and download files** ([Hacker News](https://simonwillison.net/2026/Jan/26/chatgpt-containers/)) - Nouvelles fonctionnalités des conteneurs ChatGPT.
+- **Heathrow scraps liquid container limit** ([Hacker News](https://www.bbc.com/news/articles/c1evvx89559o)) - Heathrow supprime la limite de taille des contenants de liquide.
+- **Windows 11's Patch Tuesday nightmare gets worse** ([Hacker News](https://www.windowscentral.com/microsoft/windows-11/windows-11s-botched-patch-tuesday-update-nightmare-continues-as-microsoft-confirms-some-pcs-might-fail-to-boot)) - Problèmes persistants avec les mises à jour de Windows 11.
+- **There is an AI code review bubble** ([Hacker News](https://www.greptile.com/blog/ai-code-review-bubble)) - Analyse de la bulle des revues de code par l'IA.
+- **People who know the formula for WD-40** ([Hacker News](https://www.wsj.com/business/the-secret-society-of-people-who-know-the-formula-for-wd-40-e9c0ff54)) - Article sur le secret de la formule du WD-40.
+- **JuiceSSH – Give me my pro features back** ([Hacker News](https://nproject.io/blog/juicessh-give-me-back-my-pro-features/)) - Demande de restauration des fonctionnalités pro de JuiceSSH.
+- **Study finds many software developers feel ethical pressure to ship products that may conflict with democratic values** ([Hacker News](https://www.tandfonline.com/doi/full/10.1080/1369118X.2025.2566814)) - Étude sur la pression éthique ressentie par les développeurs.
+- **The hidden engineering of runways** ([Hacker News](https://practical.engineering/blog/2026/1/20/the-hidden-engineering-of-runways)) - Article sur l'ingénierie des pistes d'atterrissage.
+- **RIP Low-Code 2014-2025** ([Hacker News](https://www.zackliscio.com/posts/rip-low-code-2014-2025/)) - Article sur la fin du mouvement low-code.
+- **AI code and software craft** ([Hacker News](https://alexwennerberg.com/blog/2026-01-25-slop.html)) - Réflexion sur l'impact de l'IA sur la qualité du code.
+- **Why there’s no European Google?** ([Lobsters](https://ploum.net/2026-01-22-why-no-european-google.html)) - Analyse des raisons de l'absence d'un équivalent européen à Google.
+- **Dithering – Part 2: The Ordered Dithering** ([Hacker News](https://visualrambling.space/dithering-part-2/)) - Deuxième partie sur le dithering.
+
+## 🤖 IA / Data / Infra
+- Aucune mise à jour notable.
+
+## 📚 À creuser
+- **Remotion** → [https://github.com/remotion-dev/remotion](https://github.com/remotion-dev/remotion)
+- **Apple's new AirTag** → [https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/](https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/)
+- **ChatGPT Containers** → [https://simonwillison.net/2026/Jan/26/chatgpt-containers/](https://simonwillison.net/2026/Jan/26/chatgpt-containers/)
+
+*Sources: [github_trending](https://github.com/remotion-dev/remotion), [reddit_programming](http://reddit.com/r/programming), [hackernews](https://www.apple.com/newsroom/2026/01/apple-introduces-new-airtag-with-expanded-range-and-improved-findability/), [lobsters](https://ploum.net/2026-01-22-why-no-european-google.html)*
+
+---
+📊 **Stats**: 1 outils | 15 articles | 0 IA/data | 0 vidéos
+🔄 **Appels API**: 7
+
+
+---
+
+## 📚 Archives
+
+- [2026-01-27](output/veille_2026-01-27.md)
+
+
+---
+
+## 🤖 À propos de cet agent
+
+### Sources de données
+| Source | Description |
+|--------|-------------|
+| 🐙 GitHub Trending | Repos populaires de la semaine |
+| 🔶 Hacker News | Top stories tech |
+| 🦞 Lobste.rs | Articles dev/tech |
+| 🔴 Reddit | r/programming, r/MachineLearning, r/devops... |
+| 📰 Tech News RSS | TechCrunch, Ars Technica, The Verge, Wired |
+| 🎥 YouTube | Vidéos tech récentes (si API configurée) |
+| 🚀 Product Hunt | Nouveaux produits/outils |
+
+### Stack technique
+- **Orchestration**: LangGraph (StateGraph)
+- **LLM**: Gemini 2.0 Flash / Mistral (fallback)
+- **Sources**: APIs publiques + scraping léger
+- **Déploiement**: GitHub Actions (quotidien) / Docker / k3s
+
+### Exécution manuelle
 
 ```bash
-# Cloner et accéder au projet
-cd AIAGENTTREND
-
-# Copier le template de configuration
-cp .env.example .env
-
-# Éditer .env avec vos clés API
-# Au minimum: GOOGLE_API_KEY ou MISTRAL_API_KEY
-```
-
-### 2. Installation locale
-
-```bash
-# Créer un environnement virtuel
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# ou: .\venv\Scripts\activate  # Windows
+# Cloner le repo
+git clone https://github.com/LovichiDorian/AIAgentTrend.git
+cd AIAgentTrend
 
 # Installer les dépendances
 pip install -r requirements.txt
-```
 
-### 3. Exécution
+# Configurer les clés API
+cp .env.example .env
+# Éditer .env avec GOOGLE_API_KEY ou MISTRAL_API_KEY
 
-**Mode CLI:**
-
-```bash
+# Lancer une veille
 cd src
+python main.py "Quoi de neuf en tech ?" -o auto
+```
 
-# Veille générale
-python main.py "Quoi de neuf en tech ?"
+### Options CLI
 
-# Veille focalisée IA
+```bash
+# Focus thématique
 python main.py --focus ai "Nouveautés LLM"
+python main.py --focus devops "Kubernetes"
+python main.py --focus security "Vulnérabilités récentes"
 
-# Veille DevOps
-python main.py --focus devops "Kubernetes et cloud natif"
+# Sauvegarder le résultat
+python main.py "Veille" -o auto                    # veille_YYYY-MM-DD.md
+python main.py "Veille" -o mon_fichier             # mon_fichier.md
 
-# Voir le statut de la config
-python main.py --status
-```
-
-**Mode serveur HTTP:**
-
-```bash
+# Mode serveur HTTP
 python main.py --serve --port 8080
-
-# Puis dans un navigateur ou curl:
-# GET http://localhost:8080/watch?focus=ai
-# POST http://localhost:8080/watch avec JSON body
 ```
 
-## 🐳 Déploiement Docker
-
-```bash
-# Build de l'image
-docker build -t tech-watch-agent:latest .
-
-# Exécution locale
-docker run -d \
-  --name tech-watch \
-  -p 8080:8080 \
-  -e GOOGLE_API_KEY=your-key \
-  tech-watch-agent:latest
-```
-
-## ☸️ Déploiement k3s
-
-```bash
-# Créer le secret avec vos clés API
-kubectl create secret generic tech-watch-secrets \
-  --from-literal=GOOGLE_API_KEY=your-key \
-  --from-literal=MISTRAL_API_KEY=your-key
-
-# Déployer
-kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/service.yaml
-
-# Vérifier
-kubectl get pods -l app=tech-watch-agent
-kubectl logs -f deployment/tech-watch-agent
-```
-
-## 📡 Sources de données
-
-| Source          | Type                  | API               | Statut         |
-| --------------- | --------------------- | ----------------- | -------------- |
-| GitHub Trending | Repos populaires      | Scraping          | ✅ Gratuit     |
-| Hacker News     | Articles/discussions  | API publique      | ✅ Gratuit     |
-| Reddit          | Subreddits tech       | API JSON publique | ✅ Gratuit     |
-| Lobste.rs       | Articles dev          | API JSON          | ✅ Gratuit     |
-| Tech News RSS   | TechCrunch, Ars, etc. | RSS feeds         | ✅ Gratuit     |
-| Product Hunt    | Nouveaux produits     | Scraping          | ⚠️ Limité      |
-| YouTube         | Vidéos tech           | API v3            | 🔑 Clé requise |
-| Web Search      | Recherche générale    | SerpAPI/DDG       | 🔑 Optionnel   |
-| ArXiv           | Papers IA/ML          | RSS               | ✅ Gratuit     |
-
-## 🏗️ Architecture LangGraph
-
-```
-[START]
-   │
-   ▼
-┌─────────┐
-│ Planning│  ← Analyse la requête, décide les sources
-└────┬────┘
-     │
-     ▼
-┌──────────┐
-│Collection│  ← Appelle les tools en parallèle
-└────┬─────┘
-     │
-     ▼
-┌──────────┐
-│ Filtering│  ← Déduplique, filtre, priorise
-└────┬─────┘
-     │
-     ▼
-┌──────────┐
-│ Synthesis│  ← Génère la synthèse via LLM
-└────┬─────┘
-     │
-     ▼
-┌────────┐
-│ Output │   ← Formate la sortie finale
-└────┬───┘
-     │
-     ▼
-  [END]
-```
-
-## ⚙️ Optimisations ressources
-
-L'agent est conçu pour tourner sur un VPS modeste:
-
-- **Appels LLM minimisés**: Résumé hiérarchique, un seul appel final
-- **Requêtes parallèles**: Collecte simultanée des sources
-- **Déduplication**: Évite les doublons avant synthèse
-- **Limites configurables**: `max_items_per_source`, timeouts
-- **Fallback gracieux**: Continue si une source échoue
-- **Ressources Kubernetes**: Requests/limits adaptés (128Mi-512Mi RAM)
-
-## 📝 Format de sortie
-
-```markdown
-## 🎯 Vue d'ensemble
-
-- Point clé 1
-- Point clé 2
-- ...
-
-## 🛠️ Outils & Projets Dev
-
-- **Nom** (langage) - Contexte → Intérêt
-
-## 📰 Articles & Discussions
-
-- **Titre** (source) - Résumé
-
-## 🤖 IA / Data / Infra
-
-- Mises à jour notables...
-
-## 📚 À creuser
-
-- Recommandations concrètes
-```
-
-## 🔑 Variables d'environnement
-
-| Variable          | Requis | Description                   |
-| ----------------- | ------ | ----------------------------- |
-| `GOOGLE_API_KEY`  | ⚠️     | Clé API Gemini                |
-| `MISTRAL_API_KEY` | ⚠️     | Clé API Mistral (alternative) |
-| `YOUTUBE_API_KEY` | ❌     | YouTube Data API v3           |
-| `SERPAPI_KEY`     | ❌     | Recherche web avancée         |
-| `DEBUG`           | ❌     | Mode debug (true/false)       |
-| `LOG_LEVEL`       | ❌     | Niveau de log (INFO)          |
-| `HTTP_PORT`       | ❌     | Port serveur (8080)           |
+---
 
 ## 📜 License
 
 MIT
 
-## 🤝 Contribution
+---
 
-Les PRs sont bienvenues! Priorités:
-
-- Nouvelles sources de données
-- Amélioration du filtrage/scoring
-- Optimisations performance
-- Tests unitaires
-
-python main.py "Quoi de neuf en tech ?" -o auto
+*Dernière mise à jour: 27/01/2026 10:39 UTC*
