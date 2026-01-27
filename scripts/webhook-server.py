@@ -12,7 +12,7 @@ import subprocess
 import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-# Configuration
+# Configurationn
 WEBHOOK_SECRET = os.environ.get("WEBHOOK_SECRET", "your-secret-here")
 REPO_PATH = os.environ.get("REPO_PATH", "/home/ubuntu/projects/AIAgentTrend")
 PORT = int(os.environ.get("WEBHOOK_PORT", "9000"))
