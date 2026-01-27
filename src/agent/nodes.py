@@ -345,16 +345,32 @@ async def filtering_node(state: TechWatchState) -> dict[str, Any]:
         filtered_items = filtered_items[:max_total_items]
         logger.info(f"   Limité à {max_total_items} items (top pertinence)")
     
+    # Séparer nouveaux items et déjà vus (pour éviter doublons email)
+    new_items = filtered_items
+    seen_items = []
+    
+    try:
+        from history_tracker import separate_new_and_seen
+        new_items, seen_items = separate_new_and_seen(filtered_items)
+        logger.info(f"   Nouveaux items: {len(new_items)}")
+        logger.info(f"   Déjà vus (rappels): {len(seen_items)}")
+    except ImportError:
+        logger.warning("   history_tracker non disponible, tous les items traités comme nouveaux")
+    
     logger.info(f"   Items finaux: {len(filtered_items)}")
     
     return {
-        "filtered_items": filtered_items,
+        "filtered_items": filtered_items,  # Tous les items pour le README
+        "new_items": new_items,             # Nouveaux pour l'email
+        "seen_items": seen_items,           # Déjà vus (rappels)
         "deduplicated_count": deduplicated_count,
         "metadata": {
             **state.get("metadata", {}),
             "filtering_completed": True,
             "items_before_filter": len(all_items),
-            "items_after_filter": len(filtered_items)
+            "items_after_filter": len(filtered_items),
+            "new_items_count": len(new_items),
+            "seen_items_count": len(seen_items)
         }
     }
 
@@ -374,25 +390,32 @@ RÈGLES STRICTES:
 - Français avec termes techniques en anglais
 - Phrases courtes et directes
 - TOUJOURS inclure les URLs des sources entre parenthèses ou en lien markdown
+- Si des items sont marqués [RAPPEL], ils ont déjà été mentionnés les jours précédents mais restent populaires
 
 FORMAT DE RÉPONSE OBLIGATOIRE:
 
 ## 🎯 Vue d'ensemble
 - [3-5 points clés des grandes tendances/annonces, avec lien vers la source principale]
 
-## 🛠️ Outils & Projets Dev
+## 🆕 Nouveautés de la semaine
+
+### 🛠️ Outils & Projets Dev
 [3-10 entrées max, format:]
 - **[Nom]** ([langage/stack]) - [1 phrase contexte technique] → [pourquoi c'est intéressant]
   🔗 [URL du repo/projet]
 
-## 📰 Articles & Discussions
+### 📰 Articles & Discussions
 [Liste des articles/posts importants avec:]
 - **[Titre]** ([source]) - [1-2 phrases résumé du problème/angle technique]
   🔗 [URL de l'article]
 
-## 🤖 IA / Data / Infra
+### 🤖 IA / Data / Infra
 [Mises à jour notables: nouveaux modèles, frameworks, annonces cloud, pricing]
   🔗 [URLs des sources]
+
+## 🔄 Rappels (toujours populaires)
+[Items déjà mentionnés les jours précédents mais qui restent dans le top - à consulter si pas encore fait]
+- **[Nom]** - [Courte description] 🔗 [URL]
 
 ## 📚 À creuser
 [3-5 recommandations concrètes, OBLIGATOIREMENT avec les liens complets]
@@ -418,6 +441,8 @@ async def synthesis_node(state: TechWatchState) -> dict[str, Any]:
     logger.info("✍️ Génération de la synthèse...")
     
     filtered_items = state.get("filtered_items", [])
+    new_items = state.get("new_items", filtered_items)  # Nouveaux items
+    seen_items = state.get("seen_items", [])  # Items déjà vus (rappels)
     user_query = state.get("user_query", "Quoi de neuf en tech ?")
     focus = state.get("focus", "general")
     errors = state.get("errors", [])
@@ -428,13 +453,16 @@ async def synthesis_node(state: TechWatchState) -> dict[str, Any]:
             "completed_at": datetime.now()
         }
     
-    # Organiser les items par catégorie
+    # Organiser les NOUVEAUX items par catégorie
     categories = {
         "tools": [],      # GitHub, Product Hunt, DevHunt
         "articles": [],   # HN, Reddit, Lobsters, Tech News
         "ai_data": [],    # ArXiv, Reddit ML, contenus IA
         "videos": []      # YouTube
     }
+    
+    # Catégorie séparée pour les rappels
+    recalls = []
     
     source_category_map = {
         "github_trending": "tools",
@@ -456,10 +484,14 @@ async def synthesis_node(state: TechWatchState) -> dict[str, Any]:
         "web_search_ddg": "articles"
     }
     
-    for item in filtered_items:
+    # Classer les NOUVEAUX items
+    for item in new_items:
         source = item.get("_source", "")
         category = source_category_map.get(source, "articles")
         categories[category].append(item)
+    
+    # Les items déjà vus vont dans les rappels (limité à 10)
+    recalls = seen_items[:10]
     
     # Limiter chaque catégorie pour économiser les tokens
     max_per_category = 15
@@ -504,7 +536,7 @@ async def synthesis_node(state: TechWatchState) -> dict[str, Any]:
     
     # Construire le prompt
     data_section = f"""
-## Données collectées
+## Données collectées - NOUVEAUTÉS
 
 ### 🛠️ Outils & Projets (GitHub, Product Hunt, etc.)
 {format_items_for_llm(categories['tools'], 'tools')}
@@ -517,6 +549,9 @@ async def synthesis_node(state: TechWatchState) -> dict[str, Any]:
 
 ### 🎥 Vidéos (YouTube)
 {format_items_for_llm(categories['videos'], 'videos')}
+
+## 🔄 RAPPELS (déjà mentionnés les jours précédents, toujours populaires)
+{format_items_for_llm(recalls, 'articles') if recalls else "[Aucun rappel cette semaine]"}
 """
     
     # Ajouter les infos sur les erreurs si pertinent
@@ -715,6 +750,16 @@ async def output_node(state: TechWatchState) -> dict[str, Any]:
     logger.info("📤 Finalisation...")
     
     synthesis = state.get("synthesis", "")
+    new_items = state.get("new_items", [])
+    seen_items = state.get("seen_items", [])
+    
+    # Marquer les nouveaux items comme envoyés dans l'historique
+    try:
+        from history_tracker import mark_items_as_sent
+        mark_items_as_sent(new_items)
+        logger.info(f"   {len(new_items)} items marqués comme envoyés")
+    except ImportError:
+        pass
     
     # Ajouter un footer avec les stats
     stats = state.get("section_summaries", {})
@@ -725,6 +770,7 @@ async def output_node(state: TechWatchState) -> dict[str, Any]:
 
 ---
 📊 **Stats**: {stats.get('tools_count', 0)} outils | {stats.get('articles_count', 0)} articles | {stats.get('ai_data_count', 0)} IA/data | {stats.get('videos_count', 0)} vidéos
+🆕 **Nouveautés**: {len(new_items)} | 🔄 **Rappels**: {len(seen_items)}
 🔄 **Appels API**: {api_calls}
 """
     
@@ -738,6 +784,8 @@ async def output_node(state: TechWatchState) -> dict[str, Any]:
             **state.get("metadata", {}),
             "completed": True,
             "total_items_processed": len(state.get("filtered_items", [])),
+            "new_items_count": len(new_items),
+            "seen_items_count": len(seen_items),
             "total_api_calls": api_calls,
             "error_count": len(errors)
         }

@@ -55,6 +55,8 @@ class TechWatchState(TypedDict, total=False):
     
     # Filtrage
     filtered_items: list[dict]
+    new_items: list[dict]  # Nouveaux items (pas encore envoyés)
+    seen_items: list[dict]  # Items déjà vus (rappels)
     deduplicated_count: int
     
     # Synthèse

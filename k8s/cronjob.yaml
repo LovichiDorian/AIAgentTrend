@@ -37,7 +37,7 @@ spec:
                   "--focus",
                   "all",
                   "--period",
-                  "today",
+                  "week",
                   "-o",
                   "auto",
                   "--email",
