@@ -1,0 +1,28 @@
+[Unit]
+Description=GitHub Webhook Auto-Deploy Server
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/projects/AIAgentTrend
+
+# Variables d'environnement
+Environment="WEBHOOK_SECRET=CHANGE_ME_TO_RANDOM_SECRET"
+Environment="REPO_PATH=/home/ubuntu/projects/AIAgentTrend"
+Environment="WEBHOOK_PORT=9000"
+
+# Commande
+ExecStart=/usr/bin/python3 /home/ubuntu/projects/AIAgentTrend/scripts/webhook-server.py
+
+# Redémarrage automatique
+Restart=always
+RestartSec=10
+
+# Logs
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
