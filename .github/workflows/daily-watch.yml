@@ -71,3 +71,49 @@ jobs:
 
           # Push
           git push
+
+      - name: 📧 Envoyer l'email de veille
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "🔍 Veille Tech du jour"
+          to: dorianppl852@gmail.com
+          from: Tech Watch Agent <${{ secrets.EMAIL_USERNAME }}>
+          html_body: |
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>
+                body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+                h1, h2, h3 { color: #1a1a1a; }
+                a { color: #0066cc; }
+                .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+                .section { background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0; }
+                .footer { color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <h1>🔍 Veille Tech Quotidienne</h1>
+                <p>Générée automatiquement le ${{ github.event.repository.updated_at || 'aujourd`hui' }}</p>
+              </div>
+              
+              <p>Bonjour ! Voici votre synthèse tech du jour.</p>
+              
+              <p>📄 <strong>Consultez la veille complète sur GitHub :</strong></p>
+              <p><a href="https://github.com/${{ github.repository }}#-dernière-veille">Voir le README complet</a></p>
+              
+              <p>📚 <strong>Archives :</strong></p>
+              <p><a href="https://github.com/${{ github.repository }}/tree/main/output">Voir toutes les veilles</a></p>
+              
+              <div class="footer">
+                <p>🤖 Généré par <a href="https://github.com/${{ github.repository }}">Tech Watch Agent</a></p>
+                <p>Pour ne plus recevoir ces emails, supprimez le secret EMAIL_USERNAME de votre repo.</p>
+              </div>
+            </body>
+            </html>
+          attachments: output/veille_*.md
+        continue-on-error: true # Ne pas faire échouer le workflow si l'email échoue
