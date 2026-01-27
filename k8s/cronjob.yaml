@@ -1,0 +1,74 @@
+# =============================================================================
+# Kubernetes CronJob - Tech Watch Agent
+# Exécution quotidienne à 8h UTC
+# =============================================================================
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: tech-watch-daily
+  labels:
+    app: tech-watch-agent
+spec:
+  schedule: "0 8 * * *" # Tous les jours à 8h UTC
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 600 # Timeout 10 minutes
+      template:
+        metadata:
+          labels:
+            app: tech-watch-agent
+            job-type: daily-watch
+        spec:
+          restartPolicy: OnFailure
+
+          containers:
+            - name: tech-watch
+              image: tech-watch-agent:latest
+              imagePullPolicy: IfNotPresent
+
+              command: ["python", "-m", "src.main"]
+              args: ["--focus", "all", "-o", "auto"]
+
+              envFrom:
+                - secretRef:
+                    name: tech-watch-secrets
+
+              resources:
+                requests:
+                  memory: "128Mi"
+                  cpu: "100m"
+                limits:
+                  memory: "512Mi"
+                  cpu: "500m"
+
+              volumeMounts:
+                - name: output-volume
+                  mountPath: /app/output
+                - name: tmp-volume
+                  mountPath: /tmp
+
+          volumes:
+            - name: output-volume
+              persistentVolumeClaim:
+                claimName: tech-watch-output
+            - name: tmp-volume
+              emptyDir: {}
+
+---
+# PersistentVolumeClaim pour stocker les fichiers de veille
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tech-watch-output
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-path # StorageClass par défaut de k3s
