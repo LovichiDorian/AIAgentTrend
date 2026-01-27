@@ -32,7 +32,15 @@ spec:
               imagePullPolicy: IfNotPresent
 
               command: ["python", "-m", "src.main"]
-              args: ["--focus", "all", "-o", "auto"]
+              args:
+                [
+                  "--focus",
+                  "all",
+                  "-o",
+                  "auto",
+                  "--email",
+                  "dorianppl852@gmail.com",
+                ]
 
               envFrom:
                 - secretRef:

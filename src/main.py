@@ -167,6 +167,13 @@ Exemples:
         help="Dossier de sortie pour les fichiers (défaut: output)"
     )
     
+    parser.add_argument(
+        "--email",
+        type=str,
+        default=None,
+        help="Envoyer le résultat par email (ex: --email dorianppl852@gmail.com)"
+    )
+    
     args = parser.parse_args()
     
     # Mode debug
@@ -217,6 +224,14 @@ Exemples:
         
         logger.info(f"📄 Résultat sauvegardé dans: {output_path}")
         print(f"\n📄 Fichier créé: {output_path}")
+    
+    # Envoyer par email si demandé
+    if args.email:
+        try:
+            from email_sender import send_veille_email
+            send_veille_email(result, to_email=args.email)
+        except Exception as e:
+            logger.error(f"❌ Erreur envoi email: {e}")
     
     print("\n" + "=" * 60)
     print(result)
