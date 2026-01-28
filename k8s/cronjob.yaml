@@ -1,6 +1,6 @@
 # =============================================================================
 # Kubernetes CronJob - Tech Watch Agent
-# Exécution quotidienne à 8h UTC
+# Exécution quotidienne à 6h UTC (7h heure française en hiver)
 # =============================================================================
 
 apiVersion: batch/v1
@@ -10,7 +10,7 @@ metadata:
   labels:
     app: tech-watch-agent
 spec:
-  schedule: "0 8 * * *" # Tous les jours à 8h UTC
+  schedule: "0 6 * * *" # Tous les jours à 6h UTC = 7h heure française (hiver)
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
