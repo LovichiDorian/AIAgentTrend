@@ -227,11 +227,35 @@ Exemples:
     
     # Envoyer par email si demandé
     if args.email:
+        # EMAIL 1: Veille Tech (inchangé)
         try:
             from email_sender import send_veille_email
             send_veille_email(result, to_email=args.email)
         except Exception as e:
-            logger.error(f"❌ Erreur envoi email: {e}")
+            logger.error(f"❌ Erreur envoi email tech: {e}")
+        
+        # EMAIL 2: Startups Tech (nouveau, séparé)
+        try:
+            from startup_scraper import collect_all_startups
+            from startup_email import send_startup_email
+            
+            logger.info("🚀 Collecte des startups depuis 12 sources...")
+            startup_data = asyncio.run(collect_all_startups())
+            
+            if startup_data.get("startups_week"):
+                send_startup_email(
+                    startups_week=startup_data["startups_week"],
+                    startups_month=startup_data.get("startups_month", []),
+                    yc_batch=startup_data.get("yc_batch"),
+                    yc_batch_url=startup_data.get("yc_batch_url"),
+                    sources_scraped=startup_data.get("sources_scraped"),
+                    total_sources=startup_data.get("total_sources", 12),
+                    to_email=args.email
+                )
+            else:
+                logger.info("ℹ️ Aucune startup détectée - email startups non envoyé")
+        except Exception as e:
+            logger.error(f"❌ Erreur envoi email startups: {e}")
     
     print("\n" + "=" * 60)
     print(result)
