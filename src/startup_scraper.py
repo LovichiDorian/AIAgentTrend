@@ -225,85 +225,135 @@ async def fetch_hackernews_showhn(limit: int = 15) -> List[Dict]:
 
 
 # =============================================================================
-# SOURCE 2: Y COMBINATOR - Companies API
+# SOURCE 2: Y COMBINATOR - API OFFICIELLE (W25, S25, W26...)
 # =============================================================================
 
-async def detect_yc_batch() -> Tuple[str, str]:
-    """Détecte le dernier batch YC."""
+async def detect_yc_batches() -> List[str]:
+    """
+    Retourne les batches YC récents à récupérer.
+    Couvre Winter 2025 jusqu'au batch actuel.
+    """
     now = datetime.now()
-    year = now.year % 100
+    year = now.year % 100  # 2026 -> 26
     month = now.month
     
+    # Liste des batches récents (du plus récent au plus ancien)
+    # Couvre les 3 derniers batches minimum
+    batches = []
+    
+    # Batch actuel
     if month >= 1 and month <= 6:
-        batch = f"W{year}"
+        batches.append(f"W{year}")      # Winter actuel
+        batches.append(f"S{year-1}")    # Summer précédent
+        batches.append(f"W{year-1}")    # Winter précédent
     else:
-        batch = f"S{year}"
+        batches.append(f"S{year}")      # Summer actuel
+        batches.append(f"W{year}")      # Winter actuel
+        batches.append(f"S{year-1}")    # Summer précédent
     
-    return batch, f"https://www.ycombinator.com/companies?batch={batch}"
+    return batches
 
 
-async def fetch_yc_companies(limit: int = 15) -> Dict:
-    """Récupère les startups YC via l'API Algolia."""
-    batch, batch_url = await detect_yc_batch()
-    startups = []
+async def fetch_yc_api(batch: str, limit: int = 10) -> List[Dict]:
+    """
+    Récupère les startups YC via l'API officielle.
     
-    # YC utilise Algolia - essayons l'endpoint public
-    url = "https://45bwzj1sgc-dsn.algolia.net/1/indexes/*/queries"
+    API: https://api.ycombinator.com/v0.1/companies?batch=W25
+    """
+    url = f"https://api.ycombinator.com/v0.1/companies?batch={batch}"
     
-    headers = {
-        "x-algolia-api-key": "MjBjYjRiMzY0NzdhZWY0NjExY2NhZjYxMGIxYjc2MTAwNWFkNTkwNTc4NjgxYjU0YzFhYTY2ZGQ5OGY5NDMxZnJlc3RyaWN0SW5kaWNlcz0lNUIlMjJZQ0NvbXBhbnlfcHJvZHVjdGlvbiUyMiU1RCZ0YWdGaWx0ZXJzPSU1QiUyMnljX2JhdGNoJTNBVzI2JTIyJTVE",
-        "x-algolia-application-id": "45BWZJ1SGC",
+    try:
+        async with httpx.AsyncClient(timeout=REQUEST_TIMEOUT) as client:
+            response = await client.get(url, headers={"Accept": "application/json"})
+            
+            if response.status_code != 200:
+                logger.debug(f"YC API error {batch}: {response.status_code}")
+                return []
+            
+            data = response.json()
+            companies = data if isinstance(data, list) else data.get("companies", [])
+            
+            startups = []
+            for company in companies[:limit]:
+                name = company.get("name", "")
+                one_liner = company.get("oneLiner", "")
+                long_desc = company.get("longDescription", "")
+                industries = company.get("industries", [])
+                website = company.get("website", "")
+                yc_url = company.get("url", "")
+                team_size = company.get("teamSize", 0)
+                
+                # Construire la description
+                description = one_liner or long_desc[:150] if long_desc else ""
+                if industries and not description:
+                    description = f"Startup in {', '.join(industries[:2])}"
+                
+                # Filtrer tech only
+                tech_indicators = ["ai", "software", "saas", "api", "data", "cloud", 
+                                   "tech", "platform", "automation", "developer", "fintech",
+                                   "robotics", "machine learning", "b2b"]
+                text_to_check = (name + " " + description + " " + " ".join(industries)).lower()
+                
+                # Inclure toutes les startups YC récentes (elles sont généralement tech)
+                startups.append({
+                    "name": name,
+                    "description": description[:150] if description else f"YC {batch} startup",
+                    "url": website or yc_url,
+                    "incubator": f"YC {batch}",
+                    "funding": "Seed ($500K YC)",
+                    "country": "🇺🇸 USA",
+                    "source": "yc",
+                    "industries": industries,
+                    "team_size": team_size
+                })
+            
+            return startups
+            
+    except Exception as e:
+        logger.error(f"YC API error: {e}")
+        return []
+
+
+async def fetch_yc_companies(limit: int = 10) -> Dict:
+    """
+    Récupère les startups des batches YC récents (W25, S25, W26...).
+    
+    Utilise l'API officielle YC:
+    https://api.ycombinator.com/v0.1/companies?batch=W25
+    """
+    batches = await detect_yc_batches()
+    all_startups = []
+    
+    # Récupérer les startups de chaque batch
+    for batch in batches:
+        startups = await fetch_yc_api(batch, limit=limit // len(batches) + 5)
+        if startups:
+            logger.info(f"   ✓ YC {batch}: {len(startups)} startups")
+            all_startups.extend(startups)
+    
+    # Dédupliquer
+    seen = set()
+    unique = []
+    for s in all_startups:
+        name = s.get("name", "").lower()
+        if name and name not in seen:
+            seen.add(name)
+            unique.append(s)
+    
+    # Prendre les N premières (les plus récentes en premier)
+    final_startups = unique[:limit]
+    
+    if final_startups:
+        logger.info(f"   ✓ YC Total: {len(final_startups)} startups (batches: {', '.join(batches)})")
+    else:
+        logger.warning(f"   ⚠️ YC: 0 startups")
+    
+    return {
+        "batch": batches[0] if batches else "W26",
+        "batch_url": f"https://www.ycombinator.com/companies?batch={batches[0]}" if batches else "",
+        "batches_scraped": batches,
+        "startups": final_startups
     }
-    
-    # Fallback: scraping basique
-    response = await http_get(batch_url)
-    if response:
-        try:
-            soup = BeautifulSoup(response.text, "html.parser")
-            
-            # Chercher tous les liens de companies
-            links = soup.find_all("a", href=re.compile(r"/companies/[a-z0-9-]+"))
-            seen = set()
-            
-            for link in links[:limit * 3]:
-                href = link.get("href", "")
-                if href in seen:
-                    continue
-                seen.add(href)
-                
-                # Extraire le texte du lien et ses parents
-                text = link.get_text(separator=" ", strip=True)
-                parent = link.find_parent()
-                if parent:
-                    text = parent.get_text(separator=" | ", strip=True)
-                
-                # Parser
-                parts = [p.strip() for p in text.split("|") if p.strip()]
-                name = parts[0][:50] if parts else ""
-                
-                if not name or len(name) < 2 or name.lower() in ["companies", "all", "batch"]:
-                    continue
-                
-                description = " ".join(parts[1:3])[:150] if len(parts) > 1 else ""
-                
-                if is_tech_startup(name + " " + description):
-                    startups.append({
-                        "name": name,
-                        "description": description or f"YC {batch} startup",
-                        "url": f"https://www.ycombinator.com{href}",
-                        "incubator": f"YC {batch}",
-                        "funding": "Seed ($500K)",
-                        "country": "🇺🇸 USA",
-                        "source": "yc"
-                    })
-                
-                if len(startups) >= limit:
-                    break
-                    
-        except Exception as e:
-            logger.error(f"YC parsing error: {e}")
-    
-    return {"batch": batch, "batch_url": batch_url, "startups": startups}
 
 
 # =============================================================================
